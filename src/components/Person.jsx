@@ -108,7 +108,7 @@ const Person = () => {
           }`}
         >
           <Shield className="w-6 inline h-6 mr-2" />
-          <span className=" text-lg font-monospace">Your Team</span>
+          <span className=" text-lg font-monospace">Your Team ({selectedTeam.length})</span>
         </button>
       </div>
       {/* Toggle button end here */}
