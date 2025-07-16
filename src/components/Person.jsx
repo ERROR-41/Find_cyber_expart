@@ -20,7 +20,7 @@ const Person = () => {
 
   const apiFetchData = async () => {
     try {
-      const res = await fetch("/exparts.json");
+      const res = await fetch("exparts.json");
       const jsonData = await res.json();
       setSpecialists(jsonData);
     } catch (error) {
@@ -279,7 +279,7 @@ const Person = () => {
             </div>
           ) : (
             <>
-              <div className="max-w-7xl text-white mx-auto bg-slate-800/90 backdrop-blur-sm rounded-xl p-8 border-2 border-slate-600/50">
+              <div className="w-full max-w-7xl text-white mx-auto bg-slate-800/90 backdrop-blur-sm rounded-xl p-8 border-2 border-slate-600/50">
                 <h3 className="text-3xl font-bold mb-6 text-center">
                   🛡️ Your Security Team
                 </h3>
