@@ -6,12 +6,11 @@ import Header from "./components/Header";
 const App = () => {
   
   return (
-    <div className="w-full mx-auto ">
+    <div className="w-full mx-auto  scroll-smooth scrollbar-hide">
       <Header />
       <div className="flex flex-col md:flex-row items-center">
-          <Person />
+        <Person />
       </div>
-
     </div>
   );
 };

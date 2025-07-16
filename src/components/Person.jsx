@@ -15,8 +15,23 @@ import { useEffect } from "react";
 const Person = () => {
   const [specialists, setSpecialists] = useState([]);
   const [budget] = useState(10000000);
-  const [selectedTeam, setSelectedTeam] = useState([]);
-  const [activeTab, setActiveTab] = useState("specialists");
+  const [selectedTeam, setSelectedTeam] = useState(() => {
+    const savedTeam = localStorage.getItem('selectedTeam');
+    return savedTeam ? JSON.parse(savedTeam) : [];
+  });
+  const [activeTab, setActiveTab] = useState(() => {
+    const savedTab = localStorage.getItem('activeTab');
+    return savedTab || "specialists";
+  });
+
+  // Save to localStorage whenever selectedTeam or activeTab changes
+  useEffect(() => {
+    localStorage.setItem('selectedTeam', JSON.stringify(selectedTeam));
+  }, [selectedTeam]);
+
+  useEffect(() => {
+    localStorage.setItem('activeTab', activeTab);
+  }, [activeTab]);
 
   const apiFetchData = async () => {
     try {
@@ -85,12 +100,12 @@ const Person = () => {
   const securityLevel = getSecurityLevel();
 
   return (
-    <div className="w-full mx-auto px-4 py-6 bg-gradient-to-br from-slate-900 to-slate-800">
+    <div className=" w-full mx-auto px-4 py-6 bg-gradient-to-br from-slate-900 to-slate-800">
       {/* Toggle button start here */}
       <div className="flex max-w-7xl mx-auto flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 mb-8">
         <button
           onClick={() => setActiveTab("specialists")}
-          className={`flex-1 px-6 py-5 rounded-xl font-semibold transition-all text-center border-2 flex items-center justify-center ${
+          className={`flex-1 px-6 cursor-pointer py-5 rounded-xl font-semibold transition-all text-center border-2 flex items-center justify-center ${
             activeTab === "specialists"
               ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg border-blue-500"
               : "bg-slate-700/50 text-gray-200 hover:bg-slate-600/50 border-slate-600 hover:border-slate-500"
@@ -101,18 +116,19 @@ const Person = () => {
         </button>
         <button
           onClick={() => setActiveTab("team")}
-          className={`flex-1 px-6 py-5 rounded-xl font-semibold transition-all text-center border-2 items-center justify-center ${
+          className={`flex-1 px-6 py-5 cursor-pointer rounded-xl font-semibold transition-all text-center border-2 items-center justify-center ${
             activeTab === "team"
               ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg border-blue-500"
               : "bg-slate-700/50 text-gray-200 hover:bg-slate-600/50 border-slate-600 hover:border-slate-500"
           }`}
         >
           <Shield className="w-6 inline h-6 mr-2" />
-          <span className=" text-lg font-monospace">Your Team ({selectedTeam.length})</span>
+          <span className=" text-lg font-monospace">
+            Your Team ({selectedTeam.length})
+          </span>
         </button>
       </div>
       {/* Toggle button end here */}
-
       {/* Dashboard visibility card  */}
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2  lg:grid-cols-4 gap-4 mb-6">
         <div className="bg-slate-800/80 backdrop-blur-sm rounded-xl p-6 border-2 border-slate-600/50 hover:border-slate-500/50  transition-all">
@@ -175,7 +191,6 @@ const Person = () => {
       </div>
       {/* Dashboard visibility card  end here */}
       {/* Content card start */}
-
       {activeTab === "specialists" && (
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {specialists.map((specialist) => {
@@ -239,7 +254,7 @@ const Person = () => {
                             : addToTeam(specialist)
                         }
                         disabled={!canAfford && !isHired}
-                        className={`px-4 py-2 rounded-lg font-semibold transition-all border-2 ${
+                        className={`px-4 py-2 cursor-pointer rounded-lg font-semibold transition-all border-2 ${
                           isHired
                             ? "bg-red-600 hover:bg-red-700 text-white border-red-500 shadow-md"
                             : canAfford
@@ -261,7 +276,6 @@ const Person = () => {
           })}
         </div>
       )}
-
       {activeTab === "team" && (
         <div className="space-y-6">
           {selectedTeam.length === 0 ? (
